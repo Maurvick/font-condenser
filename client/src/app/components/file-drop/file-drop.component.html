@@ -1,0 +1,12 @@
+<div>
+  <h2>Upload file</h2>
+  <input type="file" (change)="onFileChange($event)" />
+  <button (click)="onFileUpload()">Send file</button>
+  <div>
+    <p>{{ message }}</p>
+    <div *ngIf="message">
+      <h3>Script Output:</h3>
+      <pre>{{ output }}</pre>
+    </div>
+  </div>
+</div>
