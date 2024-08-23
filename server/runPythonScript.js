@@ -3,25 +3,23 @@ const path = require('path');
 
 const ffpython = path.join(__dirname, './FontForgeBuilds', 'bin', 'ffpython');
 
-function runPythonScript(scriptPath, args = []) {
+function runPythonScript(scriptPath, args = [], callback) {
   const command = `${ffpython} ${scriptPath} ${args.join(' ')}`;
 
   exec(command, (error, stdout, stderr) => {
     if (error) {
       console.error(`Error: ${error.message}`);
-      return;
+      return callback(error);
     }
     if (stderr) {
       console.error(`stderr: ${stderr}`);
-      return;
+      return callback(new Error(stderr));
     }
-    console.log(`stdout: ${stdout}`);
+
+    // Assuming the output font path is returned by the Python script as the last line in stdout
+    const outputFontPath = stdout.trim(); // Ensure that the path is extracted correctly
+    callback(null, outputFontPath);
   });
 }
 
 module.exports = { runPythonScript };
-
-// runPythonScript('./condense_font.py', [
-//   './fonts/FiraCode-Regular.ttf',
-//   './fonts',
-// ]);
