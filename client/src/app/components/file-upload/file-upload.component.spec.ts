@@ -1,18 +1,17 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { FileDropComponent } from './file-drop.component';
+import { FileUploadComponent } from './file-upload.component';
 
 describe('FileDropComponent', () => {
-  let component: FileDropComponent;
-  let fixture: ComponentFixture<FileDropComponent>;
+  let component: FileUploadComponent;
+  let fixture: ComponentFixture<FileUploadComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [FileDropComponent]
-    })
-    .compileComponents();
+      imports: [FileUploadComponent],
+    }).compileComponents();
 
-    fixture = TestBed.createComponent(FileDropComponent);
+    fixture = TestBed.createComponent(FileUploadComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });
