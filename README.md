@@ -4,7 +4,7 @@ Squishes font width a bit in order to have better code readability.
 
 For font editing this project uses fontforge python.
 
-Idea for python script comes from this blog: https://horstmann.com/unblog/2010-11-22/fonts.html
+Idea for python script comes from this [blog](https://horstmann.com/unblog/2010-11-22/fonts.html) and this [repo](https://github.com/N-R-K/NRK-Mono/blob/master/condenser.py).
 
 # Preview
 
