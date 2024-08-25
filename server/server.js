@@ -48,7 +48,7 @@ app.post('/condense-font', upload.single('file'), (req, res) => {
   }
 
   const script = './scripts/condense_font.py';
-  const filePath = path.resolve(req.file.path);
+  const inputFilePath = path.resolve(req.file.path);
   const outputDir = path.resolve(__dirname, 'fonts');
 
   // Create output directory if it doesn't exist
@@ -56,21 +56,42 @@ app.post('/condense-font', upload.single('file'), (req, res) => {
     fs.mkdirSync(outputDir);
   }
 
-  runPythonScript(script, [filePath, outputDir], (error, outputFontPath) => {
-    if (error) {
-      return res.status(500).json({ message: `Error: ${error.message}` });
-    }
-
-    // Serve the newly generated font file
-    res.download(outputFontPath, (err) => {
-      if (err) {
-        console.error(`Error sending file: ${err.message}`);
-        res.status(500).json({ message: 'Error sending the file' });
-      } else {
-        console.log(`File sent: ${outputFontPath}`);
+  runPythonScript(
+    script,
+    [inputFilePath, outputDir],
+    (error, outputFontPath) => {
+      if (error) {
+        return res.status(500).json({ message: `Error: ${error.message}` });
       }
-    });
-  });
+
+      // Serve the newly generated font file
+      res.download(outputFontPath, (err) => {
+        if (err) {
+          console.error(`Error sending file: ${err.message}`);
+          res.status(500).json({ message: 'Error sending the file' });
+        } else {
+          console.log(`File sent: ${outputFontPath}`);
+        }
+
+        // Clean up the uploaded and generated files
+        fs.unlink(inputFilePath, (err) => {
+          if (err) {
+            console.error(`Error deleting uploaded file: ${err.message}`);
+          } else {
+            console.log(`Uploaded file deleted: ${inputFilePath}`);
+          }
+        });
+
+        fs.unlink(outputFontPath, (err) => {
+          if (err) {
+            console.error(`Error deleting generated file: ${err.message}`);
+          } else {
+            console.log(`Generated file deleted: ${outputFontPath}`);
+          }
+        });
+      });
+    }
+  );
 });
 
 // Start the server
