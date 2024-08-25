@@ -3,7 +3,7 @@ const multer = require('multer');
 const path = require('path');
 const cors = require('cors');
 const fs = require('fs');
-const { runPythonScript } = require('./runPythonScript');
+const { runPythonScript } = require('./helpers/runPythonScript');
 
 // Initialize Express
 const app = express();
@@ -39,39 +39,38 @@ if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir);
 }
 
-app.post('/run-script', upload.single('file'), (req, res) => {
+// TODO: Handle input and output of multiple files (for ex. archive with regular, italic and bold fonts)
+// TODO: Delete files after they are processed
+// TODO: Return filename to frontend
+app.post('/condense-font', upload.single('file'), (req, res) => {
   if (!req.file) {
     return res.status(400).json({ message: 'No file uploaded' });
   }
 
+  const script = './scripts/condense_font.py';
   const filePath = path.resolve(req.file.path);
-  const outputDir = path.resolve(__dirname, 'generated_fonts');
+  const outputDir = path.resolve(__dirname, 'fonts');
 
   // Create output directory if it doesn't exist
   if (!fs.existsSync(outputDir)) {
     fs.mkdirSync(outputDir);
   }
 
-  // Run the Python script
-  runPythonScript(
-    './condense_font.py',
-    [filePath, outputDir],
-    (error, outputFontPath) => {
-      if (error) {
-        return res.status(500).json({ message: `Error: ${error.message}` });
-      }
-
-      // Serve the newly generated font file
-      res.download(outputFontPath, (err) => {
-        if (err) {
-          console.error(`Error sending file: ${err.message}`);
-          res.status(500).json({ message: 'Error sending the file' });
-        } else {
-          console.log(`File sent: ${outputFontPath}`);
-        }
-      });
+  runPythonScript(script, [filePath, outputDir], (error, outputFontPath) => {
+    if (error) {
+      return res.status(500).json({ message: `Error: ${error.message}` });
     }
-  );
+
+    // Serve the newly generated font file
+    res.download(outputFontPath, (err) => {
+      if (err) {
+        console.error(`Error sending file: ${err.message}`);
+        res.status(500).json({ message: 'Error sending the file' });
+      } else {
+        console.log(`File sent: ${outputFontPath}`);
+      }
+    });
+  });
 });
 
 // Start the server
