@@ -7,7 +7,7 @@ import { Injectable } from '@angular/core';
   providedIn: 'root',
 })
 export class FontService {
-  private apiUrl = 'http://localhost:3000/run-script'; // Your server's API endpoint
+  private apiUrl = 'http://localhost:3000/condense-font';
 
   constructor(private http: HttpClient) {}
 

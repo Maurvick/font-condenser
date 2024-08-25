@@ -1,4 +1,12 @@
 <div>
-  <h2>Upload Font</h2>
-  <input type="file" (change)="onFileSelected($event)" accept=".ttf,.otf" />
+  <div>
+    <h2>Upload Font</h2>
+    <input type="file" (change)="onFileSelected($event)" accept=".ttf,.otf" />
+  </div>
+  <div *ngIf="errorMessage" style="color: red">
+    <p>{{ errorMessage }}</p>
+  </div>
+  <div *ngIf="isSuccess" style="color: green">
+    <p>File sent...</p>
+  </div>
 </div>

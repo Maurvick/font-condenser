@@ -11,17 +11,22 @@ import { FontService } from '../../services/font-service/font.service';
   styleUrl: './file-upload.component.css',
 })
 export class FileUploadComponent {
+  errorMessage: string = '';
+  isSuccess: boolean = false;
+
   constructor(private fontService: FontService) {}
 
   onFileSelected(event: any): void {
     const file: File = event.target.files[0];
+    this.isSuccess = false;
     if (file) {
       this.fontService.uploadFont(file).subscribe({
         next: (response: Blob) => {
           this.downloadFile(response);
+          this.isSuccess = true;
         },
-        error: (error) => {
-          console.error('Error during file upload:', error);
+        error: (error: Error) => {
+          this.errorMessage = error.message;
         },
       });
     }
