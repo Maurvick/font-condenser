@@ -31,7 +31,17 @@ const storage = multer.diskStorage({
   },
 });
 
-const upload = multer({ storage: storage });
+// Create a file filter to validate the file extension
+const fileFilter = (req, file, cb) => {
+  const allowedExtensions = ['.ttf', '.otf'];
+  const ext = path.extname(file.originalname).toLowerCase();
+  if (!allowedExtensions.includes(ext)) {
+    return cb(new Error('Invalid file type. Only .ttf and .otf are allowed.'));
+  }
+  cb(null, true);
+};
+
+const upload = multer({ storage: storage, fileFilter: fileFilter });
 
 // Create the uploads directory if it doesn't exist
 const uploadsDir = path.join(__dirname, 'uploads');
@@ -40,7 +50,6 @@ if (!fs.existsSync(uploadsDir)) {
 }
 
 // TODO: Handle input and output of multiple files (for ex. archive with regular, italic and bold fonts)
-// TODO: Delete files after they are processed
 // TODO: Return filename to frontend
 app.post('/condense-font', upload.single('file'), (req, res) => {
   if (!req.file) {
