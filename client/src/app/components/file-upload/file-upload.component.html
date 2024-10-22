@@ -1,12 +1,26 @@
-<div>
-  <div>
-    <h2>Upload Font</h2>
-    <input type="file" (change)="onFileSelected($event)" accept=".ttf,.otf" />
-  </div>
-  <div *ngIf="errorMessage && !isSuccess" style="color: red">
-    <p>{{ errorMessage }}</p>
-  </div>
-  <div *ngIf="isSuccess && !errorMessage" style="color: green">
-    <p>File sent...</p>
-  </div>
+<!-- font-uploader.component.html -->
+<div class="font-uploader">
+  <h2>Upload Fonts</h2>
+  <form>
+    <input
+      type="file"
+      (change)="onFileSelected($event)"
+      accept=".ttf,.otf"
+      multiple
+    />
+
+    <!-- <button
+      [disabled]="!selectedFiles.length || isLoading"
+      (click)="uploadFiles()"
+    >
+      {{ isLoading ? "Processing..." : "Upload & Process Fonts" }}
+    </button> -->
+  </form>
+
+  <div *ngIf="errorMessage" class="error">{{ errorMessage }}</div>
+  <div *ngIf="successMessage" class="success">{{ successMessage }}</div>
+
+  <a *ngIf="downloadUrl" [href]="downloadUrl" download="processed_fonts.zip">
+    Download Processed Fonts
+  </a>
 </div>

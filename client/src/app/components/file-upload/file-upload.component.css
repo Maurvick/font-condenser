@@ -1,11 +1,25 @@
+.font-uploader {
+}
+
 button {
   margin: 10px;
   padding: 10px 20px;
-  background-color: #61dafb;
+  background-color: #818181;
   border: none;
   cursor: pointer;
+  color: #e2e2e2;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  font-size: 14px;
 }
 
 button:hover {
-  background-color: #42a5f5;
+  background-color: #646464;
+}
+
+form {
+  margin-bottom: 20px;
 }
